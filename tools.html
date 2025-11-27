@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Tools - ThreatTrace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #6b9080;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        }
+
+        .profile-info h1 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-info p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #5a6c7d;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: #6b9080;
+        }
+
+        nav a.active {
+            color: #6b9080;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 3rem;
+        }
+
+        .page-header h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #5a6c7d;
+            line-height: 1.8;
+        }
+
+        /* Category Section */
+        .category {
+            margin-bottom: 4rem;
+        }
+
+        .category h3 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .category-icon {
+            font-size: 1.8rem;
+        }
+
+        .category-description {
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        /* Tool Cards */
+        .tools-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tool-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+            border-color: #6b9080;
+        }
+
+        .tool-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .tool-card h4 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .tool-card h4 a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .tool-card h4 a:hover {
+            color: #6b9080;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e8f3ef;
+            color: #548770;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid #b8d9cb;
+        }
+
+        .tool-description {
+            color: #5a6c7d;
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .use-case {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 3px solid #6b9080;
+        }
+
+        .use-case strong {
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .use-case p {
+            color: #5a6c7d;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .command-example {
+            background: #2c3e50;
+            color: #e8f3ef;
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            overflow-x: auto;
+        }
+
+        .tool-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .tool-links a {
+            color: #6b9080;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .tool-links a:hover {
+            color: #548770;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 5rem;
+            padding: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: #5a6c7d;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #6b9080;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-header h2 {
+                font-size: 2rem;
+            }
+
+            .category h3 {
+                font-size: 1.5rem;
+            }
+
+            .tool-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="profile-header">
+                <img src="images/ThreatTrace.png" alt="ThreatTrace" class="profile-img">
+                <div class="profile-info">
+                    <h1>ThreatTrace</h1>
+                    <p>Security Research & Vulnerability Analysis</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="writeups.html">Writeups</a></li>
+                    <li><a href="tools.html" class="active">Tools</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h2>Security Tools Arsenal</h2>
+            <p>A curated collection of open-source security tools for penetration testing, vulnerability assessment, and security research. Each tool includes practical usage examples and real-world applications.</p>
+        </div>
+
+        <!-- Reconnaissance -->
+        <section class="category">
+            <h3><span class="category-icon">🔍</span> Reconnaissance & Information Gathering</h3>
+            <p class="category-description">Tools for discovering and mapping target infrastructure, identifying potential attack surfaces, and gathering intelligence.</p>
+
+            <div class="tools-grid">
+                <article class="tool-card">
+                    <div class="tool-header">
+                        <h4><a href="https://github.com/projectdiscovery/subfinder" target="_blank">Subfinder</a></h4>
+                        <span class="badge">Open Source</span>
+                    </div>
+                    <p class="tool-description">Fast subdomain discovery tool that uses passive sources to enumerate valid subdomains. Essential for mapping an organization's external attack surface.</p>
+                    
+                    <div class="use-case">
+                        <strong>Use Case:</strong>
+                        <p>Discover all subdomains of a target domain to identify forgotten services, staging environments, or misconfigured applications that might be vulnerable.</p>
+                    </div>
+
+                    <div class="command-example">
+                        subfinder -d example.com -o subdomains.txt
+                    </div>
+
+                    <div class="tool-links">
+                        <a href="https://github.com/projectdiscovery/subfinder" target="_blank">GitHub →</a>
+                        <a href="methodology.html">ThreatTrace Methodology →</a>
+                    </div>
+                </article>
+
+                <article class="tool-card">
+                    <div class="tool-header">
+                        <h4><a href="https://github.com/OWASP/Amass" target="_blank">Amass</a></h4>
+                        <span class="badge">OWASP</span>
+                    </div>
+                    <p class="tool-description">In-depth DNS enumeration and network mapping tool. Performs OSINT gathering, subdomain discovery, and DNS reconnaissance using multiple data sources.</p>
+                    
+                    <div class="use-case">
+                        <strong>Use Case:</strong>
+                        <p>Build comprehensive network maps of target organizations, discover hidden infrastructure, and identify relationships between domains and IP addresses.</p>
+                    </div>
+
+                    <div class="command-example">
+                        amass enum -d example.com -o amass_output.txt
+                    </div>
+
+                    <div class="tool-links">
+                        <a href="https://github.com/OWASP/Amass" target="_blank">GitHub →</a>
+                        <a href="methodology.html">ThreatTrace Methodology →</a>
+                    </div>
+                </article>
+
+                <article class="tool-card">
+                    <div class="tool-header">
+                        <h4><a href="https://github.com/michenriksen/aquatone" target="_blank">Aquatone</a></h4>
+                        <span class="badge">Open Source</span>
+                    </div>
+                    <p class="tool-description">Visual inspection tool for websites across large numbers of hosts. Takes screenshots of websites and provides a visual overview of HTTP-based attack surfaces.</p>
+                    
+                    <div class="use-case">
+                        <strong>Use Case:</strong>
+                        <p>Quickly review hundreds of discovered domains/subdomains visually, identify interesting targets, login panels, admin interfaces, or forgotten applications.</p>
+                    </div>
+
+                    <div class="command-example">
+                        cat subdomains.txt | aquatone -out ./aquatone_results
+                    </div>
+
+                    <div class="tool-links">
+                        <a href="https://github.com/michenriksen/aquatone" target="_blank">GitHub →</a>
+                        <a href="methodology.html">ThreatTrace Methodology →</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Web Application Testing -->
+        <section class="category">
+            <h3><span class="category-icon">🌐</span> Web Application Security</h3>
+            <p class="category-description">Comprehensive tools for testing web applications, APIs, and finding common vulnerabilities like XSS, SQLi, and authentication issues.</p>
+
+            <div class="tools-grid">
+                <article class="tool-card">
+                    <div class="tool-header">
+                        <h4><a href="https://portswigger.net/burp/communitydownload" target="_blank">Burp Suite Community</a></h4>
+                        <span class="badge">Free Edition</span>
+                    </div>
+                    <p class="tool-description">The industry-standard web application security testing toolkit. Intercepts and modifies HTTP/HTTPS traffic, essential for manual testing and vulnerability discovery.</p>
+                    
+                    <div class="use-case">
+                        <strong>Use Case:</strong>
+                        <p>Intercept requests, manipulate parameters, test for injection flaws, bypass authentication, analyze API responses, and identify business logic vulnerabilities.</p>
+                    </div>
+
+                    <div class="tool-links">
+                        <a href="https://portswigger.net/burp/communitydownload" target="_blank">Download →</a>
+                        <a href="methodology.html">ThreatTrace Methodology →</a>
+                    </div>
+                </article>
+
+                <article class="tool-card">
+                    <div class="tool-header">
+                        <h4><a href="https://github.com/sqlmapproject/sqlmap" target="_blank">SQLMap</a></h4>
+                        <span class="badge">Open Source</span>
+                    </div>
+                    <p class="tool-description">Automated SQL injection and database takeover tool. Detects and exploits SQL injection flaws across various database management systems.</p>
+                    
+                    <div class="use-case">
+                        <strong>Use Case:</strong>
+                        <p>Test web applications for SQL injection vulnerabilities, extract database contents, access file systems, and execute commands on the operating system.</p>
+                    </div>
+
+                    <div class="command-example">
+                        sqlmap -u "http://target.com/page?id=1" --dbs --batch
+                    </div>
+
+                    <div class="tool-links">
+                        <a href="https://github.com/sqlmapproject/sqlmap" target="_blank">GitHub →</a>
+                        <a href="methodology.html">ThreatTrace Methodology →</a>
+                    </div>
+                </article>
+
+                <article class="tool-card">
+                    <div class="tool-header">
+                        <h4><a href="https://github.com/ffuf/ffuf" target="_blank">ffuf</a></h4>
+                        <span class="badge">Open Source</span>
+                    </div>
+                    <p class="tool-description">Fast web fuzzer written in Go. Extremely versatile for directory brute-forcing, parameter discovery, virtual host enumeration, and more.</p>
+                    
+                    <div class="use-case">
+                        <strong>Use Case:</strong>
+                        <p>Discover hidden directories and files, enumerate API endpoints, find backup files, test for parameter pollution, and identify virtual hosts.</p>
+                    </div>
+
+                    <div class="command-example">
+                        ffuf -w wordlist.txt -u https://target.com/FUZZ -mc 200
+                    </div>
+
+                    <div class="tool-links">
+                        <a href="https://github.com/ffuf/ffuf" target="_blank">GitHub →</a>
+                        <a href="methodology.html">ThreatTrace Methodology →</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Network Security -->
+        <section class="category">
+            <h3><span class="category-icon">🌐</span> Network Security & Exploitation</h3>
+            <p class="category-description">Tools for network scanning, service enumeration, and exploitation of network-level vulnerabilities.</p>
+
+            <div class="tools-grid">
+                <article class="tool-card">
+                    <div class="tool-header">
+                        <h4><a href="https://nmap.org/" target="_blank">Nmap</a></h4>
+                        <span class="badge">Open Source</span>
+                    </div>
+                    <p class="tool-description">The definitive network scanning tool for security auditing and network discovery. Maps networks, identifies services, detects operating systems, and finds vulnerabilities.</p>
+                    
+                    <div class="use-case">
+                        <strong>Use Case:</strong>
+                        <p>Scan networks for open ports, identify running services and versions, detect operating systems, find potential vulnerabilities, and map network topology.</p>
+                    </div>
+
+                    <div class="command-example">
+                        nmap -sV -sC -O -oA scan_results target.com
+                    </div>
+
+                    <div class="tool-links">
+                        <a href="https://nmap.org/download.html" target="_blank">Download →</a>
+                        <a href="methodology.html">ThreatTrace Methodology →</a>
+                    </div>
+                </article>
+
+                <article class="tool-card">
+                    <div class="tool-header">
+                        <h4><a href="https://www.metasploit.com/" target="_blank">Metasploit Framework</a></h4>
+                        <span class="badge">Open Source</span>
+                    </div>
+                    <p class="tool-description">Comprehensive penetration testing framework with thousands of exploits, payloads, and auxiliary modules for security testing and exploitation.</p>
+                    
+                    <div class="use-case">
+                        <strong>Use Case:</strong>
+                        <p>Exploit known vulnerabilities, generate payloads, conduct post-exploitation activities, and perform comprehensive penetration tests against systems and networks.</p>
+                    </div>
+
+                    <div class="command-example">
+                        msfconsole
+                    </div>
+
+                    <div class="tool-links">
+                        <a href="https://github.com/rapid7/metasploit-framework" target="_blank">GitHub →</a>
+                        <a href="methodology.html">ThreatTrace Methodology →</a>
+                    </div>
+                </article>
+
+                <article class="tool-card">
+                    <div class="tool-header">
+                        <h4><a href="https://github.com/RustScan/RustScan" target="_blank">RustScan</a></h4>
+                        <span class="badge">Open Source</span>
+                    </div>
+                    <p class="tool-description">Modern, ultra-fast port scanner that feeds results directly into Nmap. Scans all ports in seconds while maintaining accuracy.</p>
+                    
+                    <div class="use-case">
+                        <strong>Use Case:</strong>
+                        <p>Quickly scan large networks or multiple targets for open ports, then automatically run detailed Nmap scans on discovered services for comprehensive enumeration.</p>
+                    </div>
+
+                    <div class="command-example">
+                        rustscan -a target.com -- -sV -sC
+                    </div>
+
+                    <div class="tool-links">
+                        <a href="https://github.com/RustScan/RustScan" target="_blank">GitHub →</a>
+                        <a href="methodology.html">ThreatTrace Methodology →</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Exploitation & Post-Exploitation -->
+        <section class="category">
+            <h3><span class="category-icon">💣</span> Exploitation & Payload Generation</h3>
+            <p class="category-description">Tools for creating custom payloads, privilege escalation, and post-exploitation activities.</p>
+
+            <div class="tools-grid">
+                <article class="tool-card">
+                    <div class="tool-header">
+                        <h4><a href="https://github.com/carlospolop/PEASS-ng" target="_blank">LinPEAS / WinPEAS</a></h4>
+                        <span class="badge">Open Source</span>
+                    </div>
+                    <p class="tool-description">Privilege escalation enumeration scripts for Linux and Windows. Automatically identifies potential privilege escalation paths and misconfigurations.</p>
+                    
+                    <div class="use-case">
+                        <strong>Use Case:</strong>
+                        <p>After gaining initial access to a system, quickly enumerate privilege escalation vectors including SUID binaries, weak permissions, credentials, and kernel exploits.</p>
+                    </div>
+
+                    <div class="command-example">
+                        ./linpeas.sh | tee linpeas_output.txt
+                    </div>
+
+                    <div class="tool-links">
+                        <a href="https://github.com/carlospolop/PEASS-ng" target="_blank">GitHub →</a>
+                        <a href="methodology.html">ThreatTrace Methodology →</a>
+                    </div>
+                </article>
+
+                <article class="tool-card">
+                    <div class="tool-header">
+                        <h4><a href="https://github.com/danielmiessler/SecLists" target="_blank">SecLists</a></h4>
+                        <span class="badge">Open Source</span>
+                    </div>
+                    <p class="tool-description">Collection of multiple types of security testing lists including usernames, passwords, URLs, fuzzing payloads, and web shells.</p>
+                    
+                    <div class="use-case">
+                        <strong>Use Case:</strong>
+                        <p>Essential wordlists for password cracking, directory brute-forcing, fuzzing applications, testing for common vulnerabilities, and security assessments.</p>
+                    </div>
+
+                    <div class="command-example">
+                        git clone https://github.com/danielmiessler/SecLists.git
+                    </div>
+
+                    <div class="tool-links">
+                        <a href="https://github.com/danielmiessler/SecLists" target="_blank">GitHub →</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 ThreatTrace. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://twitter.com/yourhandle" target="_blank">Twitter</a>
+                <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+                <a href="mailto:your@email.com">Email</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
+

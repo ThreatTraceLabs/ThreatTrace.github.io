@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - ThreatTrace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #6b9080;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        }
+
+        .profile-info h1 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-info p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #5a6c7d;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: #6b9080;
+        }
+
+        nav a.active {
+            color: #6b9080;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero About Section */
+        .about-hero {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .about-hero .profile-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #6b9080;
+            margin: 0 auto 1.5rem;
+            display: block;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        }
+
+        .about-hero h2 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .about-hero .tagline {
+            font-size: 1.2rem;
+            color: #6b9080;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .about-hero .intro {
+            font-size: 1.05rem;
+            color: #5a6c7d;
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .section-icon {
+            font-size: 1.8rem;
+        }
+
+        .content-section p {
+            font-size: 1.05rem;
+            color: #5a6c7d;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .content-section ul li {
+            font-size: 1.05rem;
+            color: #5a6c7d;
+            line-height: 1.8;
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .content-section ul li:before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #6b9080;
+            font-weight: bold;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .skill-category {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 3px solid #6b9080;
+        }
+
+        .skill-category h4 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .skill-category ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .skill-category ul li {
+            font-size: 0.95rem;
+            color: #5a6c7d;
+            margin-bottom: 0.5rem;
+            padding-left: 0;
+        }
+
+        .skill-category ul li:before {
+            content: "•";
+            color: #6b9080;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Certifications */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .cert-badge {
+            background: #e8f3ef;
+            color: #548770;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            border: 2px solid #b8d9cb;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: #e8f3ef;
+            transform: translateY(-2px);
+        }
+
+        .contact-item .icon {
+            font-size: 1.5rem;
+        }
+
+        .contact-item a {
+            color: #5a6c7d;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .contact-item a:hover {
+            color: #6b9080;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e0e0e0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -2.4rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #6b9080;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 0 2px #6b9080;
+        }
+
+        .timeline-item h4 {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-item .date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item p {
+            color: #5a6c7d;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 5rem;
+            padding: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: #5a6c7d;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #6b9080;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .about-hero {
+                padding: 2rem;
+            }
+
+            .about-hero h2 {
+                font-size: 1.8rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+
+            .skills-grid, .cert-grid, .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="profile-header">
+                <img src="images/ThreatTrace.png" alt="ThreatTrace" class="profile-img">
+                <div class="profile-info">
+                    <h1>ThreatTrace</h1>
+                    <p>Security Research & Vulnerability Analysis</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="writeups.html">Writeups</a></li>
+                    <li><a href="tools.html">Tools</a></li>
+                    <li><a href="about.html" class="active">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="about-hero">
+            <img src="images/HoloGamie.png" alt="Your Name" class="profile-large">
+            <h2>Mohamed Fadhel GHODHBANE </h2>
+            <p class="tagline">Cybersecurity Researcher & Penetration Tester</p>
+            <p class="intro">Passionate about discovering vulnerabilities, building security tools, and sharing knowledge with the community. I specialize in web application security, network penetration testing, and vulnerability research.</p>
+        </section>
+
+        <!-- About Me -->
+        <section class="content-section">
+            <h3><span class="section-icon">👤</span> About Me</h3>
+            <p>I'm a cybersecurity professional with a deep passion for ethical hacking and vulnerability research. My journey in cybersecurity started with curiosity about how systems work and evolved into a career dedicated to making the digital world more secure.</p>
+            
+            <p>Through ThreatTrace, I document my findings, share methodologies, and contribute to the security community. I believe in responsible disclosure and work closely with organizations to help them improve their security posture.</p>
+            
+            <p>When I'm not hunting for vulnerabilities, I enjoy participating in CTF competitions, contributing to open-source security projects, and mentoring aspiring security researchers.</p>
+        </section>
+
+        <!-- Skills & Expertise -->
+        <section class="content-section">
+            <h3><span class="section-icon">🎯</span> Skills & Expertise</h3>
+            
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4>Web Security</h4>
+                    <ul>
+                        <li>SQL Injection</li>
+                        <li>XSS (Cross-Site Scripting)</li>
+                        <li>CSRF & SSRF</li>
+                        <li>Authentication Bypass</li>
+                        <li>API Security</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h4>Network Security</h4>
+                    <ul>
+                        <li>Network Reconnaissance</li>
+                        <li>Port Scanning</li>
+                        <li>Service Enumeration</li>
+                        <li>Network Exploitation</li>
+                        <li>Wireless Security</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h4>Tools & Technologies</h4>
+                    <ul>
+                        <li>Burp Suite</li>
+                        <li>Metasploit</li>
+                        <li>Nmap</li>
+                        <li>Python Scripting</li>
+                        <li>Bash Scripting</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h4>Other Skills</h4>
+                    <ul>
+                        <li>Reverse Engineering</li>
+                        <li>Malware Analysis</li>
+                        <li>Cloud Security</li>
+                        <li>OSINT</li>
+                        <li>Report Writing</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications -->
+        <section class="content-section">
+            <h3><span class="section-icon">🏆</span> Certifications</h3>
+            <div class="cert-grid">
+                <div class="cert-badge">OSCP - Offensive Security</div>
+                <div class="cert-badge">CEH - EC-Council</div>
+                <div class="cert-badge">eJPT - eLearnSecurity</div>
+                <div class="cert-badge">CompTIA Security+</div>
+            </div>
+        </section>
+
+        <!-- Experience -->
+        <section class="content-section">
+            <h3><span class="section-icon">💼</span> Experience</h3>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>Security Researcher</h4>
+                    <p class="date">2023 - Present</p>
+                    <p>Conducting independent security research, discovering vulnerabilities in popular software, and responsibly disclosing findings to affected vendors. Multiple CVEs published.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>Penetration Tester</h4>
+                    <p class="date">2021 - 2023</p>
+                    <p>Performed comprehensive security assessments for various clients including web applications, mobile applications, and network infrastructure. Delivered detailed reports with remediation recommendations.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>Junior Security Analyst</h4>
+                    <p class="date">2020 - 2021</p>
+                    <p>Monitored security events, analyzed potential threats, and assisted in incident response activities. Developed automation scripts for security monitoring.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements -->
+        <section class="content-section">
+            <h3><span class="section-icon">⭐</span> Achievements & Recognition</h3>
+            <ul>
+                <li>Discovered 10+ CVEs in enterprise software and web applications</li>
+                <li>Hall of Fame recognition from major tech companies (Google, Microsoft, Facebook)</li>
+                <li>Top 100 ranking on HackTheBox platform</li>
+                <li>Speaker at local security conferences and meetups</li>
+                <li>Contributed to several open-source security tools</li>
+                <li>Published research papers on novel attack techniques</li>
+            </ul>
+        </section>
+
+        <!-- Contact -->
+        <section class="content-section">
+            <h3><span class="section-icon">📬</span> Get In Touch</h3>
+            <p>Interested in collaborating, have questions about my research, or want to discuss security topics? Feel free to reach out through any of these channels:</p>
+            
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <span class="icon">✉️</span>
+                    <a href="mailto:your@email.com">your@email.com</a>
+                </div>
+
+                <div class="contact-item">
+                    <span class="icon">🐦</span>
+                    <a href="https://twitter.com/yourhandle" target="_blank">@yourhandle</a>
+                </div>
+
+                <div class="contact-item">
+                    <span class="icon">💻</span>
+                    <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
+                </div>
+
+                <div class="contact-item">
+                    <span class="icon">💼</span>
+                    <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn Profile</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 ThreatTrace. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://twitter.com/yourhandle" target="_blank">Twitter</a>
+                <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+                <a href="mailto:your@email.com">Email</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
+
+
