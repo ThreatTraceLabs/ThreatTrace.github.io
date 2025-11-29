@@ -1,1 +1,51 @@
+# Jekyll Configuration for ThreatTrace
+markdown: kramdown
 
+# Kramdown settings
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: true
+
+# Plugins (GitHub Pages supports these by default)
+plugins:
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
+  - jekyll-readme-index
+  - jekyll-default-layout
+
+# Convert relative links in markdown to .html
+relative_links:
+  enabled: true
+  collections: false
+
+# Default layout for markdown files
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - .github/
+  - vendor/
+  - Gemfile
+  - Gemfile.lock
+
+# Site settings (optional but useful)
+title: ThreatTrace
+description: Security Research & Vulnerability Analysis
+author: ThreatTrace
+baseurl: "" # Leave empty if using username.github.io, otherwise "/repo-name"
+url: "" # Your GitHub Pages URL
+
+# Collections (optional - for organizing docs)
+collections:
+  writeups:
+    output: true
+    permalink: /writeups/:path/
